@@ -31,6 +31,11 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+  gem "rails-controller-testing"
+  gem "minitest"
+  gem "minitest-reporters"
+  gem "guard"
+  gem "guard-minitest"
 end
 group :production do
   gem "pg"
