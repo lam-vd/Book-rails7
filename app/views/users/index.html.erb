@@ -1,15 +1,18 @@
-<% provide(:title, 'Users')%>
+<% provide(:title, 'All Users')%>
 <p style="color: green"><%= notice %></p>
 
-<h1>Users</h1>
+<h1>All Users</h1>
+<%= will_paginate %>
 
 <div id="users">
   <% @users.each do |user| %>
-    <%= render user %>
-    <p>
-      <%= link_to "Show this user", user %>
-    </p>
+    <ul class="list-group">
+      <li>
+        <%= render user %>
+      </li>
+    </ul>
   <% end %>
 </div>
+<%= will_paginate %>
 
 <%= link_to "New user", signup_users_path %>
