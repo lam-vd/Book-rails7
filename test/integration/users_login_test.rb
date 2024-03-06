@@ -56,7 +56,7 @@ end
 class LogoutTest < Logout
   test "successful logout" do
     assert_not is_logged_in?
-    assert_response 201
+    assert_response :see_other
     assert_redirected_to root_url
   end
 
