@@ -2,14 +2,14 @@
 <html>
   <head>
     <title> <%= full_title(yield(:title)) =%> | Ruby on Rails Tutorial Sample App</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" >
     <meta charset='utf-8'>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%# render 'layouts/rails_default' %>
     <%= render 'layouts/shim' %>
+    <%= javascript_importmap_tags %>
   </head>
 
   <body>
