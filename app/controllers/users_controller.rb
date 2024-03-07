@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
-  before_action :logged_in_user, only: %i[ index show edit update destroy ]
+  before_action :logged_in_user, only: %i[ index show edit update destroy following followers ]
   before_action :correct_user, only: %i[ edit update ]
   before_action :admin_user, only: %i[ index destroy ]
   # GET /users or /users.json
@@ -64,6 +64,20 @@ class UsersController < ApplicationController
       format.html { redirect_to users_url, status: :see_other }
       format.json { head :no_content }
     end
+  end
+
+  def following
+    @title = 'Following'
+    @user  = User.find(params[:id])
+    @users = @user.following.paginate(page: params[:page])
+    render 'show_follow', status: :unprocessable_entity
+  end
+
+  def followers
+    @title = 'Followers'
+    @user  = User.find(params[:id])
+    @users = @user.followers.paginate(page: params[:page])
+    render 'show_follow', status: :unprocessable_entity
   end
 
   private

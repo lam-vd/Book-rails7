@@ -4,8 +4,10 @@ class MicropostsController < ApplicationController
   before_action :correct_user, only: %i[destroy]
   # GET /microposts or /microposts.json
   def index
-    @microposts = Micropost.all
-    @feed_items = current_user.feed.paginate(page: params[:page])
+    if logged_in?
+      @microposts = Micropost.all
+      @feed_items = current_user.feed.paginate(page: params[:page])
+    end
   end
 
   # GET /microposts/1 or /microposts/1.json

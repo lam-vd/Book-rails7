@@ -17,14 +17,21 @@ User.create!(name:  'Example User',
                password_confirmation: password,
                activated: true,
                activated_at: Time.zone.now)
-
+end
 # Generate microposts for a subset of users.
 users = User.order(:created_at).take(6)
- 50.times do 
+ 25.times do 
   content = Faker::Lorem.sentence(word_count: 5)
   users.each do |user|
     user.microposts.create!(content: content)
   end
- end
- puts "Done!!!"
 end
+
+  # Create following relationships.
+  users = User.all
+  user = users.first
+  following = users[2..25]
+  followers = users[3..20]
+  following.each { |followed| user.follow(followed) }
+  followers.each { |follower| follower.follow(user) }
+puts "Done!!!"
