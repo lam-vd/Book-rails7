@@ -14,6 +14,7 @@ class User < ApplicationRecord
     has_secure_password
     validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
 
+    scope :activated, -> { where(activated: true) }
     class << self
         # Returns the hash digest of the given string
         def digest(string)
@@ -34,11 +35,12 @@ class User < ApplicationRecord
     end
 
     # Returns true if the given token matches the digest
-    def authenticated?(remember_token)
-        return false if remember_digest.nil?
-        BCrypt::Password.new(remember_digest).is_password?(remember_token)
+    def authenticated?(attribute, token)
+        digest = send("#{attribute}_digest")
+        return false if digest.nil?
+        BCrypt::Password.new(digest).is_password?(token)
     end
-    
+
     # Forgets a user
     def forget
         update_attribute(:remember_digest, nil)
@@ -48,6 +50,16 @@ class User < ApplicationRecord
         remember_digest || remember
     end
 
+    # Activates an account
+    def activate
+        update_columns(activated: true, activated_at: Time.zone.now)
+    end
+
+    # Sends activation email
+    def send_activation_email
+        UserMailer.account_activation(self).deliver_now
+    end
+
     private
     def downcase_email
         self.email = email.downcase
@@ -55,7 +67,7 @@ class User < ApplicationRecord
 
     # Creates and assigns the activation token and digest.
     def create_activation_digest
-        self.activation_token  = User.new_token
+        activation_token  = User.new_token
         self.activation_digest = User.digest(activation_token)
     end
 end

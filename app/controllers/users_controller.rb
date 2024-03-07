@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   before_action :admin_user, only: %i[ index destroy ]
   # GET /users or /users.json
   def index
-    @users = User.paginate(page: params[:page])
+    @users = User.activated.paginate(page: params[:page])
   end
 
   # GET /users/1 or /users/1.json
@@ -14,6 +14,7 @@ class UsersController < ApplicationController
 
   # GET /users/new
   def new
+    redirect_to root_url if logged_in?
     @user = User.new
   end
 
@@ -27,9 +28,10 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
+        @user.send_activation_email
         reset_session
         log_in @user
-        flash[:success] = "welcome"
+        flash[:info] = "PLease check your email to activate your account"
         format.html { redirect_to user_url(@user), notice: "User was successfully created." }
         format.json { render :show, status: :created, location: @user }
       else

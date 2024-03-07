@@ -28,6 +28,7 @@ end
 group :development do
   gem "web-console"
   gem "pry"
+  gem "mailcatcher"
 end
 
 group :test do
