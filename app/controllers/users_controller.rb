@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
-  before_action :logged_in_user, only: %i[ index show edit update ]
+  before_action :logged_in_user, only: %i[ index show edit update destroy ]
   before_action :correct_user, only: %i[ edit update ]
   before_action :admin_user, only: %i[ index destroy ]
   # GET /users or /users.json
@@ -10,6 +10,7 @@ class UsersController < ApplicationController
 
   # GET /users/1 or /users/1.json
   def show
+    @microposts = @user.microposts.paginate(page: params[:page])
   end
 
   # GET /users/new
@@ -76,19 +77,10 @@ class UsersController < ApplicationController
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
     end
 
-    #Confirms a logged-in user
-    def logged_in_user
-      unless logged_in?
-        store_location
-        flash[:danger] = "Please log in"
-        redirect_to root_url, status: :see_other
-      end
-    end
-
     # Confirms the correct user.
     def correct_user
       set_user
-      redirect_to(root_url, status: :see_other) unless @user == current_user
+      redirect_to(root_url, status: :see_other) unless current_user?(@user)
     end
 
     # Confirms an admin user.

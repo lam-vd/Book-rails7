@@ -17,6 +17,8 @@ gem "kredis"
 gem "bcrypt", "~> 3.1.7"
 gem "faker"
 gem "will_paginate"
+gem "active_storage_validations"
+gem "image_processing"
 # gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 gem "bootsnap", require: false
 
